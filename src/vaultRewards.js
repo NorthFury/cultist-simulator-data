@@ -5,7 +5,7 @@ const aspects = readResource("/decks/vault_rewards.json").decks
     .reduce((acc, it) => {
         acc[it.id] = {
             label: it.label,
-            rewards: it.spec
+            items: it.spec
         }
         return acc
     }, {})
