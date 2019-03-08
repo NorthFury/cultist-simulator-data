@@ -43,9 +43,9 @@ function readResource(file) {
             do {
                 c = content[index++]
             } while (keyPattern.test(c))
-            sb.push('"')
-            sb.push(content.substring(i - 1, index - 1))
-            sb.push('"')
+            let token = content.substring(i - 1, index - 1)
+            if (token === "false" || token === "true" || token === "null") sb.push(token)
+            else sb.push(`"${token}"`)
             i = index - 1
             continue
         }
