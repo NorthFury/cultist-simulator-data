@@ -8,12 +8,6 @@ const allBooks = loreBooks.concat(languageBooks, otherBooks)
 const untranslatedBooks = readResource("/elements/books_untranslated.json").elements
 const studyBookRecipes = readResource("/recipes/study_1_books.json").recipes
 
-untranslatedBooks.forEach(untranslatedBook => {
-    const book = allBooks.find(it => it.id === Object.values(untranslatedBook.xtriggers)[0])
-    book.aspects[Object.keys(untranslatedBook.aspects).find(it => it !== "text" && it.startsWith("text"))] = 1
-    book.untranslatedDescription = untranslatedBook.description
-})
-
 studyBookRecipes.forEach(recipe => {
     const bookId = Object.keys(recipe.requirements)[0]
     const book = allBooks.find(it => it.id === bookId)
@@ -23,6 +17,14 @@ studyBookRecipes.forEach(recipe => {
         if (recipe.effects[key] === -1) delete recipe.effects[key]
     })
     book.rewards = Object.keys(recipe.effects).filter(it => recipe.effects[it] !== -1)
+})
+
+untranslatedBooks.forEach(untranslatedBook => {
+    const book = allBooks.find(it => it.id === Object.values(untranslatedBook.xtriggers)[0])
+    book.aspects[Object.keys(untranslatedBook.aspects).find(it => it !== "text" && it.startsWith("text"))] = 1
+    book.untranslatedDescription = untranslatedBook.description
+    //book.translatedId = book.id
+    book.id = untranslatedBook.id
 })
 
 const allBooksObject = allBooks.reduce((acc, it) => {
