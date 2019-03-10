@@ -8,6 +8,14 @@ const allBooks = loreBooks.concat(languageBooks, otherBooks)
 const untranslatedBooks = readResource("/elements/books_untranslated.json").elements
 const studyBookRecipes = readResource("/recipes/study_1_books.json").recipes
 
+function trimGameHints(text) {
+    text = text.trim()
+    if (!text.endsWith("]") && !text.endsWith("].")) return text
+
+    let index = text.lastIndexOf("[", text.length - 3)
+    return text.substring(0, index).trim()
+}
+
 studyBookRecipes.forEach(recipe => {
     const bookId = Object.keys(recipe.requirements)[0]
     const book = allBooks.find(it => it.id === bookId)
@@ -22,15 +30,16 @@ studyBookRecipes.forEach(recipe => {
 untranslatedBooks.forEach(untranslatedBook => {
     const book = allBooks.find(it => it.id === Object.values(untranslatedBook.xtriggers)[0])
     book.aspects[Object.keys(untranslatedBook.aspects).find(it => it !== "text" && it.startsWith("text"))] = 1
-    book.untranslatedDescription = untranslatedBook.description
+    book.untranslatedDescription = trimGameHints(untranslatedBook.description)
     //book.translatedId = book.id
     book.id = untranslatedBook.id
 })
 
 const allBooksObject = allBooks.reduce((acc, it) => {
     const copy = Object.assign({}, it)
-    acc[it.id] = copy
     delete copy.id
+    copy.description = trimGameHints(copy.description)
+    acc[it.id] = copy
     return acc
 }, {})
 
