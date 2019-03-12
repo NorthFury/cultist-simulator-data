@@ -31,7 +31,7 @@ untranslatedBooks.forEach(untranslatedBook => {
     const book = allBooks.find(it => it.id === Object.values(untranslatedBook.xtriggers)[0])
     book.aspects[Object.keys(untranslatedBook.aspects).find(it => it !== "text" && it.startsWith("text"))] = 1
     book.untranslatedDescription = trimGameHints(untranslatedBook.description)
-    //book.translatedId = book.id
+    book.translatedId = book.id
     book.id = untranslatedBook.id
 })
 
