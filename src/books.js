@@ -1,5 +1,6 @@
 const toLuaTable = require("./util/toLuaTable")
 const readResource = require("./util/readResource")
+const trimGameHints = require("./util/trimGameHints")
 
 const loreBooks = readResource("/elements/books_lore.json").elements
 const languageBooks = readResource("/elements/books_language.json").elements
@@ -7,14 +8,6 @@ const otherBooks = readResource("/elements/books_other.json").elements
 const allBooks = loreBooks.concat(languageBooks, otherBooks)
 const untranslatedBooks = readResource("/elements/books_untranslated.json").elements
 const studyBookRecipes = readResource("/recipes/study_1_books.json").recipes
-
-function trimGameHints(text) {
-    text = text.trim()
-    if (!text.endsWith("]") && !text.endsWith("].")) return text
-
-    let index = text.lastIndexOf("[", text.length - 3)
-    return text.substring(0, index).trim()
-}
 
 studyBookRecipes.forEach(recipe => {
     const bookId = Object.keys(recipe.requirements)[0]
