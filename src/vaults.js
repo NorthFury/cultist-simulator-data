@@ -17,7 +17,7 @@ const vaults = readResource("/elements/vaults.json").elements.reduce((acc, vault
     const success = expeditions.find(it => !it.craftable && Object.keys(it.requirements).includes(vault.id))
 
     const data = {
-        label: vault.label,
+        label: vault.label.replace(/\s\s/g, " "),
         unique: vault.unique,
         description: vault.description,
         startDescription: setup.startdescription.substring(0, setup.startdescription.length - 144),
