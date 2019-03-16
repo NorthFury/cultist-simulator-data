@@ -2,7 +2,7 @@ const toLuaTable = require("./util/toLuaTable")
 const readResource = require("./util/readResource")
 const trimGameHints = require("./util/trimGameHints")
 
-const aspects = readResource("/elements/influences.json").elements
+const influences = readResource("/elements/influences.json").elements
     .reduce((acc, it) => {
         acc[it.id] = {
             label: it.label,
@@ -14,4 +14,4 @@ const aspects = readResource("/elements/influences.json").elements
         return acc
     }, {})
 
-console.log(toLuaTable(aspects))
+console.log(toLuaTable(influences))
