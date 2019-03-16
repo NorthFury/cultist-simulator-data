@@ -23,7 +23,7 @@ function readResource(file) {
             do {
                 c = content[index++]
             } while (c !== '"' || (c === '"' && content[index - 2] === '\\'))
-            sb.push(content.substring(i - 1, index).replace(/[\r\n]+/g, ''))
+            sb.push(content.substring(i - 1, index).replace(/[\r\n\t]+/g, ''))
             i = index
             continue
         }
@@ -43,7 +43,7 @@ function readResource(file) {
             do {
                 c = content[index++]
             } while (keyPattern.test(c))
-            let token = content.substring(i - 1, index - 1)
+            let token = content.substring(i - 1, index - 1).trim()
             if (token === "false" || token === "true" || token === "null") sb.push(token)
             else sb.push(`"${token}"`)
             i = index - 1
