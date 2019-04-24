@@ -47,6 +47,18 @@ const romanceEnd = readResource("/recipes/talk_l_romance.json").recipes
         }
         return acc
     }, {})
+    
+const romanceContinue = readResource("/recipes/talk_l_romance.json").recipes
+    .filter(it => it.deckeffect && it.deckeffect["roserewards"] > 0 && it.effects && it.effects["contentment"] > 0)
+    .reduce((acc, it) => {
+        const type = it.id.split("_")[2]
+        const id = "follower_lust" + type
+        acc[id] = {
+            label: it.label,
+            descriptions: groupByFollower(it.description),
+        }
+        return acc
+    }, {})
 
 const followers = readResource("/elements/followers.json").elements
     .filter(it => it.uniquenessgroup) // only keep disciples that can be exalted
@@ -92,6 +104,7 @@ const aggregatedFollowers = Object.keys(followers).reduce((acc, id) => {
     const romanceId = Object.keys(follower.aspects).find(it => it.startsWith("follower_"))
     const start = romanceStart[romanceId]
     const end = romanceEnd[romanceId]
+    const cont = romanceContinue[romanceId]
 
     function trimVersion(version) {
         return {
@@ -111,6 +124,7 @@ const aggregatedFollowers = Object.keys(followers).reduce((acc, id) => {
             inviteDescription: start.description,
             startDescription: start.descriptions[id],
             endDescription: end.descriptions[id],
+            continueDescription: cont.descriptions[id],
             bonus: end.bonus
         }
     }
