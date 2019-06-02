@@ -9,6 +9,7 @@ const fragments = readResource("/elements/fragments.json").elements.reduce((acc,
     delete it.slots
     delete it.xtriggers
     delete it.id
+    delete it.aspects.subvertable_lore
     return acc
 }, {})
 
