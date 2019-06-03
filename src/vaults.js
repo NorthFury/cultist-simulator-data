@@ -16,6 +16,12 @@ const vaults = readResource("/elements/vaults.json").elements.reduce((acc, vault
     const setup = expeditions.find(it => it.craftable && Object.keys(it.requirements).includes(vault.id))
     const success = expeditions.find(it => !it.craftable && Object.keys(it.requirements).includes(vault.id))
 
+    const rewards = ((success.internaldeck || {}).spec || []).reduce((acc, it) => {
+        acc[it] = 1
+        return acc
+    }, {})
+    if (success.effects.funds) rewards.funds = success.effects.funds
+
     const data = {
         label: vault.label.replace(/\s\s/g, " "),
         unique: vault.unique,
@@ -24,7 +30,7 @@ const vaults = readResource("/elements/vaults.json").elements.reduce((acc, vault
         successDescription: success.startdescription,
         endDescription: success.description,
         obstacles: Object.keys(setup.effects),
-        rewards: success.effects,
+        rewards: rewards,
         randomRewards: success.deckeffect,
         location: Object.keys(vault.aspects).find(it => it !== "vault" && it !== "location")
     }
@@ -32,8 +38,6 @@ const vaults = readResource("/elements/vaults.json").elements.reduce((acc, vault
     if (!data.unique) delete data.unique
     if (!data.location) delete data.location
     if (!data.randomRewards) delete data.randomRewards
-
-    delete data.rewards[vault.id]
 
     acc[vault.id] = data
     return acc
